@@ -21,6 +21,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	// Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // Thymeleaf에서 시큐리티 태그(로그인 여부 확인 등)를 쓰기 위한 라이브러리
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    // 테스트에서 시큐리티 기능을 확인하기 위함
+    testImplementation 'org.springframework.security:spring-security-test'	
 
 	// 데이터베이스 드라이버
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' // MariaDB JDBC 드라이버

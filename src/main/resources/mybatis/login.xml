@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.web.login.mapper.LoginMapper">
+	
+	<!-- 관리자 로그인 관리-->
+	<select id="getUserInfo" parameterType="String" resultType="com.example.demo.web.login.vo.UserVo">
+		select * from user_info where user_id = #{userId}
+	</select>
+
+</mapper>
