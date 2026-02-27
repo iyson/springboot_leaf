@@ -14,6 +14,17 @@ public class MainController {
 	@Autowired
 	TestService testService;
 	
+	@RequestMapping(value = "/login", method=RequestMethod.GET)
+	public ModelAndView login() {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("login");
+		
+		//LoginVo result = mainService.getLoginInfo("user1");
+		
+		return mav;
+	}	
+	
+	
 	@RequestMapping(value = "/main", method=RequestMethod.GET)
 	public ModelAndView main() {
 		ModelAndView mav = new ModelAndView();
