@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -20,6 +21,7 @@ import com.example.demo.handler.LoginSuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Configuration
@@ -41,6 +43,14 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+	
+	//평문 패스워드로 로그인처리를 할때 
+	/*
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+	    return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
+	}
+	*/
 
     //화면 api가 하나로 구성된 프로젝트
     @Bean
@@ -53,7 +63,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .loginProcessingUrl("/loginProc") // ★ 시큐리티가 가로채서 처리함
+                //.loginProcessingUrl("/loginProc") // 시큐리티가 가로채서 처리함
                 .usernameParameter("userId")      // JS에서 보내는 key값
                 .passwordParameter("password")
                 .successHandler(loginSuccessHandler) // 성공 시 JSON 응답은 여기서!
@@ -84,7 +94,37 @@ public class SecurityConfig {
     return http.build();
     }
     */
-
+    
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = 
+            http.getSharedObject(AuthenticationManagerBuilder.class);
+        
+        authenticationManagerBuilder
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder); // 여기서 주입받은 인코더를 확실히 연결
+            
+        return authenticationManagerBuilder.build();
+    }    
+    
+    
+    //평문 패스워드로 로그인처리를 할때 
+    /*
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = 
+            http.getSharedObject(AuthenticationManagerBuilder.class);
+        
+        authenticationManagerBuilder
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder); // 여기서 주입받은 인코더를 확실히 연결
+            
+        return authenticationManagerBuilder.build();
+    }  
+    */  
+    
+    
+    
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

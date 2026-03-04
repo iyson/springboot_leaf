@@ -57,7 +57,6 @@
     <appender-ref ref="WARN_LOG" />
   </logger>
   
-  <include resource="org/springframework/boot/logging/logback/base.xml"/>
   
   <!-- 쿼리정렬 출력-->
     <logger name="jdbc" level="OFF"/>

@@ -236,21 +236,27 @@
     
 	<script layout:fragment="contentJs" th:inline="javascript">
 		$(document).ready(function(){
-			
-			$("#loginProc").click(function(){
+			$("#loginProc").click(function(e){
+				e.preventDefault();
+				
 			    var userId = $("#userId").val();
 			    var password = $("#password").val();
 			    
 			    $.ajax({
 			        url: "/loginProc", // 컨트롤러가 없어도 시큐리티가 처리합니다.
 			        type: "POST",
-			        data: {
+			        contentType: "application/json; charset=utf-8",
+			        data: JSON.stringify({
 			            "userId": userId,
 			            "password": password
-			        },
+			        }),
 			        // contentType: "application/json" <- 이 줄을 삭제하세요.
 			        success: function(data){
-			            if(data.success) location.href = "/main";
+			        	if(data.success) {
+			                location.href = "/main"; // 실제 이동할 메인 페이지 경로
+			            } else {
+			                alert(data.message || "로그인에 실패했습니다.");
+			            }
 			        },
 			        error: function(xhr) {
 			            alert("로그인 정보가 올바르지 않습니다.");

@@ -44,6 +44,7 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         // activate_yn이 'Y'이고 status가 'Y'인 경우만 활성화
-        return "Y".equals(user.getActivateYn()) && "Y".equals(user.getStatus());
+        //return "Y".equals(user.getActivateYn()) && "Y".equals(user.getStatus());
+    	return true;
     }
 }

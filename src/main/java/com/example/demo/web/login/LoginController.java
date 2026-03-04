@@ -11,9 +11,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.web.login.vo.UserVo;
@@ -39,7 +39,11 @@ public class LoginController {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     userVo.getUserId(), userVo.getPassword());
 
-            log.info("loginProc userId::: " + userVo.getUserId());
+            log.info("loginProc userId::: {}",  userVo.getUserId());
+            log.info("loginProc password::: {}",  userVo.getPassword());
+            
+            //db에 암호수동으로 추가시 확인
+            log.info("### 새로운 암호문 생성: {}", new BCryptPasswordEncoder().encode("1111"));
             
             // 2. 실제 인증 시도 (CustomUserDetailsService 호출됨)
             Authentication authentication = authenticationManager.authenticate(token);
@@ -60,6 +64,9 @@ public class LoginController {
 
         } catch (AuthenticationException e) {
             // 인증 실패 시
+        	log.error("로그인 실패 상세 원인: {}", e.getClass().getSimpleName()); // 예: BadCredentialsException
+            log.error("에러 메시지: {}", e.getMessage());
+        	
             Map<String, Object> result = new HashMap<>();
             result.put("success", false);
             result.put("message", "아이디 또는 비밀번호가 일치하지 않습니다.");
